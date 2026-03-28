@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All-Seeing AI — Understand Any Website Instantly</title>
+  <meta name="description" content="All-Seeing AI analyzes any website in seconds. Chat with web content, get AI-powered summaries, business insights, and deep analysis." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ── CANVAS: Neural grid background ── -->
+  <canvas id="neural-bg"></canvas>
+
+  <!-- ── SCAN LINE overlay ── -->
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- ── NOISE texture ── -->
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- ══════════════════════════════════════
+       HERO SECTION
+  ══════════════════════════════════════ -->
+  <nav class="nav" role="navigation">
+    <div class="nav-logo">
+      <span class="eye-icon" aria-hidden="true">◉</span>
+      <span>ALL-SEEING</span>
+    </div>
+    <div class="nav-links">
+      <a href="#results-section" class="nav-link">Dashboard</a>
+      <span class="nav-divider">|</span>
+      <span class="nav-badge">ONLINE</span>
+    </div>
+  </nav>
+
+  <section id="hero" class="hero">
+
+    <div class="hero-content">
+
+      <!-- Decorative corner brackets -->
+      <div class="corner-bracket top-left" aria-hidden="true"></div>
+      <div class="corner-bracket top-right" aria-hidden="true"></div>
+      <div class="corner-bracket bottom-left" aria-hidden="true"></div>
+      <div class="corner-bracket bottom-right" aria-hidden="true"></div>
+
+      <div class="hero-system-tag" aria-label="System tag">INTELLIGENCE SYSTEM v2.4 · ACTIVE</div>
+
+      <h1 class="hero-title" id="main-heading">
+        <span class="title-line-1">ALL-</span>
+        <span class="title-line-2">SEEING</span>
+        <span class="title-line-3">AI</span>
+      </h1>
+
+      <p class="hero-subtitle">Understand any website <em>instantly</em></p>
+
+      <div class="hero-stats" aria-label="System stats">
+        <div class="stat"><span class="stat-val">2.4s</span><span class="stat-label">avg analysis</span></div>
+        <div class="stat-sep" aria-hidden="true">·</div>
+        <div class="stat"><span class="stat-val">99.1%</span><span class="stat-label">accuracy</span></div>
+        <div class="stat-sep" aria-hidden="true">·</div>
+        <div class="stat"><span class="stat-val">∞</span><span class="stat-label">sites supported</span></div>
+      </div>
+
+      <!-- ── TARGET INPUT ── -->
+      <div class="input-container" id="target-input-container">
+        <div class="input-reticle" aria-hidden="true">
+          <div class="reticle-corner rc-tl"></div>
+          <div class="reticle-corner rc-tr"></div>
+          <div class="reticle-corner rc-bl"></div>
+          <div class="reticle-corner rc-br"></div>
+          <div class="reticle-scan"></div>
+        </div>
+
+        <div class="input-prefix" aria-hidden="true">TARGET://</div>
+        <input
+          type="url"
+          id="url-input"
+          class="url-input"
+          placeholder="paste website URL here"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Website URL to analyze"
+        />
+        <button id="analyze-btn" class="analyze-btn" aria-label="Analyze website">
+          <span class="btn-text">ANALYZE</span>
+          <span class="btn-icon" aria-hidden="true">⟶</span>
+          <div class="btn-glow" aria-hidden="true"></div>
+        </button>
+      </div>
+
+      <p class="input-hint">Try: <button class="hint-tag" data-url="https://stripe.com">stripe.com</button> <button class="hint-tag" data-url="https://notion.so">notion.so</button> <button class="hint-tag" data-url="https://figma.com">figma.com</button></p>
+    </div>
+
+    <!-- Hero ambient orbs -->
+    <div class="hero-orb orb-1" aria-hidden="true"></div>
+    <div class="hero-orb orb-2" aria-hidden="true"></div>
+    <div class="hero-orb orb-3" aria-hidden="true"></div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" aria-label="Scroll to results">
+      <div class="scroll-line"></div>
+      <span>SCROLL</span>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════
+       LOADING OVERLAY
+  ══════════════════════════════════════ -->
+  <div id="loading-overlay" class="loading-overlay" aria-live="polite" role="status" hidden>
+    <div class="loading-inner">
+      <div class="loading-eye" aria-hidden="true">
+        <div class="eye-ring r1"></div>
+        <div class="eye-ring r2"></div>
+        <div class="eye-ring r3"></div>
+        <div class="eye-core"></div>
+      </div>
+      <div class="loading-label">SCANNING TARGET</div>
+      <div class="loading-url" id="loading-url"></div>
+      <div class="loading-bar-wrap" aria-hidden="true">
+        <div class="loading-bar" id="loading-bar"></div>
+      </div>
+      <div class="loading-steps" id="loading-steps">
+        <div class="lstep" id="ls1">[ ] Fetching content</div>
+        <div class="lstep" id="ls2">[ ] Parsing structure</div>
+        <div class="lstep" id="ls3">[ ] Running AI analysis</div>
+        <div class="lstep" id="ls4">[ ] Building insights</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       RESULTS DASHBOARD
+  ══════════════════════════════════════ -->
+  <section id="results-section" class="results-section" hidden>
+
+    <div class="results-header">
+      <div class="results-target-info">
+        <span class="results-tag">ANALYSIS COMPLETE</span>
+        <span class="results-url-badge" id="results-url-badge"></span>
+      </div>
+      <button id="new-analysis-btn" class="new-analysis-btn" aria-label="Start new analysis">
+        ＋ NEW TARGET
+      </button>
+    </div>
+
+    <div class="dashboard-grid">
+
+      <!-- ── CHAT PANEL ── -->
+      <div class="panel chat-panel glass-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <span class="panel-icon" aria-hidden="true">💬</span>
+            <span class="panel-title">INTEL CHAT</span>
+          </div>
+          <div class="panel-status online" aria-label="Chat online">LIVE</div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages" role="log" aria-label="Chat messages" aria-live="polite">
+          <!-- Messages injected by JS -->
+        </div>
+
+        <div class="chat-input-row">
+          <input
+            type="text"
+            id="chat-input"
+            class="chat-input"
+            placeholder="Ask anything about this site..."
+            autocomplete="off"
+            aria-label="Chat message"
+          />
+          <button id="chat-send-btn" class="chat-send-btn" aria-label="Send message">
+            <span aria-hidden="true">⟶</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ── SUMMARY PANEL ── -->
+      <div class="panel summary-panel glass-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <span class="panel-icon" aria-hidden="true">📄</span>
+            <span class="panel-title">SITE BRIEF</span>
+          </div>
+        </div>
+
+        <div class="tab-bar" role="tablist" aria-label="Summary tabs">
+          <button class="tab active" role="tab" data-tab="short" aria-selected="true" id="tab-short">Summary</button>
+          <button class="tab" role="tab" data-tab="bullets" aria-selected="false" id="tab-bullets">Bullets</button>
+          <button class="tab" role="tab" data-tab="proscons" aria-selected="false" id="tab-proscons">Pros / Cons</button>
+        </div>
+
+        <div class="tab-content" id="tab-content" role="tabpanel" aria-labelledby="tab-short">
+          <!-- Content injected by JS -->
+        </div>
+      </div>
+
+      <!-- ── AI INSIGHTS PANEL ── -->
+      <div class="panel insights-panel glass-panel">
+        <div class="panel-header">
+          <div class="panel-title-group">
+            <span class="panel-icon" aria-hidden="true">💡</span>
+            <span class="panel-title">AI INSIGHTS</span>
+          </div>
+          <div class="panel-badge">GPT-4o</div>
+        </div>
+
+        <div class="insights-tabs" role="tablist" aria-label="Insights tabs">
+          <button class="insights-tab active" data-itab="ideas" role="tab" aria-selected="true">Business Ideas</button>
+          <button class="insights-tab" data-itab="improve" role="tab" aria-selected="false">Improvements</button>
+          <button class="insights-tab" data-itab="takeaways" role="tab" aria-selected="false">Takeaways</button>
+        </div>
+
+        <div class="insights-content" id="insights-content">
+          <!-- Content injected by JS -->
+        </div>
+      </div>
+
+    </div><!-- /dashboard-grid -->
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
